@@ -22,10 +22,10 @@ union byte4_t {
     friend std::ostream & operator<<(
         std::ostream & os, byte4_t const & rhs)
     {
-        os << static_cast<char>(rhs.bit.a);
-        os << static_cast<char>(rhs.bit.b);
-        os << static_cast<char>(rhs.bit.c);
-        os << static_cast<char>(rhs.bit.d);
+        os << static_cast<unsigned char>(rhs.bit.a);
+        os << static_cast<unsigned char>(rhs.bit.b);
+        os << static_cast<unsigned char>(rhs.bit.c);
+        os << static_cast<unsigned char>(rhs.bit.d);
         return os;
     }
 };
@@ -42,8 +42,8 @@ union byte2_t {
     friend std::ostream & operator<<(
         std::ostream & os, byte2_t const & rhs)
     {
-        os << static_cast<char>(rhs.bit.a);
-        os << static_cast<char>(rhs.bit.b);
+        os << static_cast<unsigned char>(rhs.bit.a);
+        os << static_cast<unsigned char>(rhs.bit.b);
         return os;
     }
 };
@@ -61,7 +61,7 @@ private:
 //----------------------------------------------------------------
 // 檔案檔頭型別(共 14 bytes)
 struct FileHeader {
-    char type[2]= {'B', 'M'};
+    unsigned char type[2]= {'B', 'M'};
     byte4_t size;
     byte2_t reserved1=0;
     byte2_t reserved2=0;
