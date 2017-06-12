@@ -7,68 +7,61 @@ Final: 2017/06/11
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 #include "Raw2Img.hpp"
 using namespace std;
 using uch = unsigned char;
 
-// total 14 bytes
-struct FileHeader {
-    char type[2]= {'B', 'M'};
-    byte4_t size;
-    byte2_t reserved1=0;
-    byte2_t reserved2=0;
-    byte4_t headSize=54;
-    friend ostream & operator<<(ostream & os, FileHeader const & rhs) {
-        os << rhs.type[0] << rhs.type[1];
-        os << rhs.size;
-        os << rhs.reserved1 << rhs.reserved2;
-        os << rhs.headSize;
-        return os;
+inline uch& r3dim(vector<uch>& pix, size_t idx, RGB_t rgb) {
+    return pix[(idx*3)+rgb];
+}
+class Raw {
+public:
+    // 讀檔
+    static void read_raw(vector<uch>& raw, string name) {
+        fstream file(name.c_str(), ios::in | ios::binary | ios::ate);
+        raw.resize(file.tellg());
+        file.seekg(0, ios::beg);
+        file.read((char*)raw.data(), raw.size());
+        file.close();
     }
-};
-// total 40 bytes
-struct InfoHeader {
-    byte4_t size=40;
-    byte4_t width;
-    byte4_t height;
-    byte2_t planes=1;
-    byte2_t bits;
-    byte4_t compression=0;
-    byte4_t imagesize;
-    byte4_t xresolution=0;
-    byte4_t yresolution=0;
-    byte4_t ncolours=0;
-    byte4_t importantcolours=0;
-    friend ostream & operator<<(ostream & os, InfoHeader const & rhs) {
-        os << rhs.size;
-        os << rhs.width << rhs.height;
-        os << rhs.planes << rhs.bits;
-        os << rhs.compression << rhs.imagesize;
-        os << rhs.xresolution << rhs.yresolution;
-        os << rhs.ncolours << rhs.importantcolours;
-        return os;
+    // 寫檔
+    static void raw2bmp(string name, vector<uch>& v, size_t w, size_t h) {
+        // 檔案資訊
+        size_t alig = 0;
+        FileHeader file_h;
+        file_h.size = w*h*3+54;
+        // 圖片資訊
+        InfoHeader info_h;
+        info_h.width = w;
+        info_h.height = h;
+        info_h.bits = 24;
+        info_h.imagesize = w*h*3;
+        // 寫檔
+        fstream img("Bitmap.bmp", ios::out | ios::binary);
+        img << file_h << info_h;
+        for(int j = h-1; j >= 0; --j) {
+            for(unsigned i = 0; i < w; ++i) {
+                img << static_cast<char>(r3dim(v, j*w+i, B));
+                img << static_cast<char>(r3dim(v, j*w+i, G));
+                img << static_cast<char>(r3dim(v, j*w+i, R));
+            }
+            // 對齊4byte
+
+        }
+        img.close();
     }
 };
 //================================================================
 int main(int argc, char const *argv[]) {
-    FileHeader fh;
-    InfoHeader ih;
     vector<uch> v;
     // 讀檔
-    fstream raw("pic.raw", ios::in | ios::binary | ios::ate);
-    v.resize(raw.tellg());
-    raw.seekg(0, ios::beg);
-    raw.read((char*)v.data(), v.size());
-    raw.close();
+    Raw::read_raw(v, "pic.raw");
     // 檔頭
     size_t w=960, h=540;
-    fh.size = w*h*3+54;
-    ih.width = w;
-    ih.height = h;
-    ih.bits = 24;
-    ih.imagesize = w*h*3;
-    fstream img("Bitmap.bmp", ios::out | ios::binary);
-    img << fh << ih;
+    // 寫檔
+    Raw::raw2bmp("Bitmap.bmp", v, w, h);
+    system("Bitmap.bmp");
     return 0;
 }
 //================================================================
