@@ -65,7 +65,7 @@ struct FileHeader {
     byte4_t size;
     byte2_t reserved1=0;
     byte2_t reserved2=0;
-    byte4_t headSize=54;
+    byte4_t headSize=54+1024;
     friend std::ostream & operator<<(
         std::ostream & os, FileHeader const & rhs)
     {
@@ -84,11 +84,13 @@ struct InfoHeader {
     byte2_t planes=1;
     byte2_t bits;
     byte4_t compression=0;
-    byte4_t imagesize;
+    byte4_t imagesize=0;
+    // 72dpi=2835, 96dpi=3780, 120dpi=4724, 300dpi=11811
     byte4_t xresolution=0;
     byte4_t yresolution=0;
     byte4_t ncolours=0;
     byte4_t importantcolours=0;
+
     friend std::ostream & operator<<(
         std::ostream & os, InfoHeader const & rhs)
     {
