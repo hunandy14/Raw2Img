@@ -22,19 +22,15 @@ void Raw::raw2bmp(
     FileHeader file_h = makeFH(width, height, bits);
     // 圖片資訊
     InfoHeader info_h = makeIH(width, height, bits);
-    // 二維讀取RGB
-    auto at2d3c = [&](size_t y, size_t x, RGB_t rgb)-> uch& {
-        return raw[(y*width+x)*3 + rgb];
-    };
     // 寫檔
     fstream img(name, ios::out | ios::binary);
     img << file_h << info_h;
     size_t alig = (4 - width%4)%4;
     for(int j = height-1; j >= 0; --j) {
         for(unsigned i = 0; i < width; ++i) {
-            img << at2d3c(j, i, B);
-            img << at2d3c(j, i, G);
-            img << at2d3c(j, i, R);
+            img << raw[(j*width+i)*3 + 0];
+            img << raw[(j*width+i)*3 + 1];
+            img << raw[(j*width+i)*3 + 2];
         }
         // 對齊4byte
         for(unsigned i = 0; i < alig; ++i)
