@@ -28,9 +28,9 @@ void Raw::raw2bmp(
     size_t alig = (4 - width%4)%4;
     for(int j = height-1; j >= 0; --j) {
         for(unsigned i = 0; i < width; ++i) {
-            img << raw[(j*width+i)*3 + 0];
-            img << raw[(j*width+i)*3 + 1];
             img << raw[(j*width+i)*3 + 2];
+            img << raw[(j*width+i)*3 + 1];
+            img << raw[(j*width+i)*3 + 0];
         }
         // 對齊4byte
         for(unsigned i = 0; i < alig; ++i)
