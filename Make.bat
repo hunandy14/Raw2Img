@@ -10,7 +10,7 @@ set folder=%OneDrive%\Git Repository\Raw2Img
 ::=========================================================================
 ::檔案名稱 - 多檔編譯(自動補上".cpp")
 set main=%project%_main
-rem set file0=Raw2img.cpp
+set file0=Raw2img.cpp
 set file1=
 set file2=
 set file3=
