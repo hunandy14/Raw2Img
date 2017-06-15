@@ -98,11 +98,10 @@ private:
     using uch = unsigned char;
     // RGB 轉灰階公式
     static uch rgb2gray(uch* p){
-        return static_cast<uch>(
-            0.299 * static_cast<float>(*(p+R))+
-            0.587 * static_cast<float>(*(p+G))+
-            0.114 * static_cast<float>(*(p+B))
-        );
+        return ((
+            19595 * (*(p+R))+
+            38469 * (*(p+G))+
+            7472  * (*(p+B))) >> 16);
     }
     // 創建檔頭
     static FileHeader makeFH(

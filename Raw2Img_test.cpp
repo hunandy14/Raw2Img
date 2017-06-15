@@ -29,7 +29,7 @@ int main(int argc, char const *argv[]) {
     string bmpName = "Gamma.bmp";
     clock_t start;
 
-    size_t times=1;
+    size_t times=20;
     start = clock();
     for(unsigned i = 0; i < times; ++i) {
         Raw::raw2bmp(bmpName, raw_pix, 1536, 2048);
