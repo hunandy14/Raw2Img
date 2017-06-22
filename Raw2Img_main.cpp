@@ -22,11 +22,12 @@ int main(int argc, char const *argv[]) {
     system(bmpName.c_str());
     // 彩圖存灰階
     Raw::raw2graybmp(bmpName, raw_pix, 960, 540);
-    system(bmpName.c_str());
+    // system(bmpName.c_str());
     // 灰階存灰階
     Raw::raw2gray(raw_pix);
     Raw::raw2graybmp(bmpName, raw_pix, 960, 540, 8);
-    system(bmpName.c_str());
+    // system(bmpName.c_str());
+
     return 0;
 }
 //================================================================

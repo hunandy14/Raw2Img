@@ -5,6 +5,7 @@ By   : CharlotteHonG
 Final: 2017/06/14
 *****************************************************************/
 #pragma once
+#include <iterator>
 
 // RGB 型別
 enum RGB {R, G, B};
@@ -35,6 +36,8 @@ public:
         operator uint32_t&() {return raw;}
         friend std::ostream& operator<<(
             std::ostream& os, byte4_t const& rhs);
+        friend std::fstream& operator>>(
+            std::fstream& is, byte4_t& rhs);
     };
     // byte2 型別
     union byte2_t {
@@ -48,6 +51,8 @@ public:
         operator uint16_t&() {return raw;}
         friend std::ostream& operator<<(
             std::ostream& os, byte2_t const& rhs);
+        friend std::fstream& operator>>(
+            std::fstream& is, byte2_t& rhs);
     };
 private:
     // 檔案檔頭型別(共 14 bytes)
@@ -57,8 +62,8 @@ private:
         byte2_t reserved1=0;
         byte2_t reserved2=0;
         byte4_t headSize=54;
-        friend std::ostream & operator<<(
-            std::ostream & os, FileHeader const & rhs)
+        friend std::fstream & operator<<(
+            std::fstream & os, FileHeader const & rhs)
         {
             os << rhs.type[0] << rhs.type[1];
             os << rhs.size;
@@ -82,8 +87,8 @@ private:
         byte4_t ncolours=0;
         byte4_t importantcolours=0;
 
-        friend std::ostream & operator<<(
-            std::ostream & os, InfoHeader const & rhs)
+        friend std::fstream & operator<<(
+            std::fstream & os, InfoHeader const & rhs)
         {
             os << rhs.size;
             os << rhs.width << rhs.height;
@@ -109,6 +114,7 @@ private:
     {
         FileHeader file_h;
         file_h.size = file_h.headSize + width*height * bits/8;
+        if(bits==8) file_h.size += 1024;
         file_h.headSize = headSize;
         return file_h;
     }
@@ -172,4 +178,23 @@ inline std::ostream& operator<<(
     os << static_cast<unsigned char>(rhs.bit.a);
     os << static_cast<unsigned char>(rhs.bit.b);
     return os;
+}
+
+inline std::fstream& operator>>(
+    std::fstream& is, Raw::byte4_t& rhs)
+{
+    using is_it = std::istream_iterator<unsigned char>;
+    rhs.bit.a = *static_cast<is_it>(is);
+    rhs.bit.b = *static_cast<is_it>(is);
+    rhs.bit.c = *static_cast<is_it>(is);
+    rhs.bit.d = *static_cast<is_it>(is);
+    return is;
+}
+inline std::fstream& operator>>(
+    std::fstream& is, Raw::byte2_t& rhs)
+{
+    using is_it = std::istream_iterator<unsigned char>;
+    rhs.bit.a = *static_cast<is_it>(is);
+    rhs.bit.b = *static_cast<is_it>(is);
+    return is;
 }
