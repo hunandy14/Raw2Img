@@ -26,9 +26,10 @@ int main(int argc, char const *argv[]) {
     system(bmpName.c_str());
 
     // 讀取 Bmp
-    // vector<unsigned char> raw_pix2;
-    // Raw::read_bmp(raw_pix2, bmpName);
-    // Raw::write_raw("test_960x540_24bit.raw", raw_pix2);
+    vector<unsigned char> raw_pix2;
+    Raw::read_bmp(raw_pix2, bmpName);
+    Raw::write_raw("test_960x540_24bit.raw", raw_pix2);
+    system("test_960x540_24bit.raw");
     return 0;
 }
 //================================================================

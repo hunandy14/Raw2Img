@@ -29,29 +29,33 @@ union byte4_t {
     byte4_t(uint32_t i): raw(i) {}
     operator uint32_t&() {return raw;}
     friend std::ostream& operator<<(
-        std::ostream& os, byte4_t const& rhs)
-    {
-        os << static_cast<unsigned char>(rhs.bit.a);
-        os << static_cast<unsigned char>(rhs.bit.b);
-        os << static_cast<unsigned char>(rhs.bit.c);
-        os << static_cast<unsigned char>(rhs.bit.d);
-        return os;
-    }
+        std::ostream& os, byte4_t const& rhs);
     friend std::fstream& operator>>(
-        std::fstream& is, byte4_t& rhs)
-    {
-        char temp;
-        is >> temp;
-        rhs.bit.a = temp;
-        is >> temp;
-        rhs.bit.b = temp;
-        is >> temp;
-        rhs.bit.c = temp;
-        is >> temp;
-        rhs.bit.d = temp;
-        return is;
-    }
+        std::fstream& is, byte4_t& rhs);
 };
+inline std::ostream& operator<<(
+    std::ostream& os, byte4_t const& rhs)
+{
+    os << static_cast<unsigned char>(rhs.bit.a);
+    os << static_cast<unsigned char>(rhs.bit.b);
+    os << static_cast<unsigned char>(rhs.bit.c);
+    os << static_cast<unsigned char>(rhs.bit.d);
+    return os;
+}
+inline std::fstream& operator>>(
+    std::fstream& is, byte4_t& rhs)
+{
+    char temp;
+    is >> temp;
+    rhs.bit.a = temp;
+    is >> temp;
+    rhs.bit.b = temp;
+    is >> temp;
+    rhs.bit.c = temp;
+    is >> temp;
+    rhs.bit.d = temp;
+    return is;
+}
 // byte2 型別
 union byte2_t {
     uint16_t raw;
@@ -63,23 +67,29 @@ union byte2_t {
     byte2_t(uint16_t i): raw(i) {}
     operator uint16_t&() {return raw;}
     friend std::ostream& operator<<(
-        std::ostream& os, byte2_t const& rhs)
-    {
-        os << static_cast<unsigned char>(rhs.bit.a);
-        os << static_cast<unsigned char>(rhs.bit.b);
-        return os;
-    }
+        std::ostream& os, byte2_t const& rhs);
     friend std::fstream& operator>>(
-        std::fstream& is, byte2_t& rhs)
-    {
-        char temp;
-        is >> temp;
-        rhs.bit.a = temp;
-        is >> temp;
-        rhs.bit.b = temp;
-        return is;
-    }
+        std::fstream& is, byte2_t& rhs);
 };
+inline std::ostream& operator<<(
+    std::ostream& os, byte2_t const& rhs)
+{
+    os << static_cast<unsigned char>(rhs.bit.a);
+    os << static_cast<unsigned char>(rhs.bit.b);
+    return os;
+}
+inline std::fstream& operator>>(
+    std::fstream& is, byte2_t& rhs)
+{
+    char temp;
+    is >> temp;
+    rhs.bit.a = temp;
+    is >> temp;
+    rhs.bit.b = temp;
+    return is;
+}
+//----------------------------------------------------------------
+//----------------------------------------------------------------
 // 檔案檔頭型別(共 14 bytes)
 struct FileHeader {
     unsigned char type[2]= {'B', 'M'};
@@ -88,24 +98,28 @@ struct FileHeader {
     byte2_t reserved2=0;
     byte4_t headSize=54;
     friend std::ostream & operator<<(
-        std::ostream & os, FileHeader const & rhs)
-    {
-        os << rhs.type[0] << rhs.type[1];
-        os << rhs.size;
-        os << rhs.reserved1 << rhs.reserved2;
-        os << rhs.headSize;
-        return os;
-    }
+        std::ostream & os, FileHeader const & rhs);
     friend std::fstream& operator>>(
-        std::fstream& is, FileHeader & rhs)
-    {
-        is >> rhs.type[0] >> rhs.type[1];
-        is >> rhs.size;
-        is >> rhs.reserved1 >> rhs.reserved2;
-        is >> rhs.headSize;
-        return is;
-    }
+        std::fstream& is, FileHeader & rhs);
 };
+inline std::ostream & operator<<(
+    std::ostream & os, FileHeader const & rhs)
+{
+    os << rhs.type[0] << rhs.type[1];
+    os << rhs.size;
+    os << rhs.reserved1 << rhs.reserved2;
+    os << rhs.headSize;
+    return os;
+}
+inline std::fstream& operator>>(
+    std::fstream& is, FileHeader & rhs)
+{
+    is >> rhs.type[0] >> rhs.type[1];
+    is >> rhs.size;
+    is >> rhs.reserved1 >> rhs.reserved2;
+    is >> rhs.headSize;
+    return is;
+}
 // 資訊檔頭型別 (共 40 byte)
 struct InfoHeader {
     byte4_t size=40;
@@ -120,27 +134,31 @@ struct InfoHeader {
     byte4_t yresolution=0;
     byte4_t ncolours=0;
     byte4_t importantcolours=0;
-
     friend std::ostream& operator<<(
-        std::ostream& os, InfoHeader const & rhs)
-    {
-        os << rhs.size;
-        os << rhs.width << rhs.height;
-        os << rhs.planes << rhs.bits;
-        os << rhs.compression << rhs.imagesize;
-        os << rhs.xresolution << rhs.yresolution;
-        os << rhs.ncolours << rhs.importantcolours;
-        return os;
-    }
+        std::ostream& os, InfoHeader const & rhs);
     friend std::fstream& operator>>(
-        std::fstream& is, InfoHeader & rhs)
-    {
-        is >> rhs.size;
-        is >> rhs.width >> rhs.height;
-        is >> rhs.planes >> rhs.bits;
-        is >> rhs.compression >> rhs.imagesize;
-        is >> rhs.xresolution >> rhs.yresolution;
-        is >> rhs.ncolours >> rhs.importantcolours;
-        return is;
-    }
+        std::fstream& is, InfoHeader & rhs);
 };
+
+inline std::ostream& operator<<(
+    std::ostream& os, InfoHeader const & rhs)
+{
+    os << rhs.size;
+    os << rhs.width << rhs.height;
+    os << rhs.planes << rhs.bits;
+    os << rhs.compression << rhs.imagesize;
+    os << rhs.xresolution << rhs.yresolution;
+    os << rhs.ncolours << rhs.importantcolours;
+    return os;
+}
+inline std::fstream& operator>>(
+    std::fstream& is, InfoHeader & rhs)
+{
+    is >> rhs.size;
+    is >> rhs.width >> rhs.height;
+    is >> rhs.planes >> rhs.bits;
+    is >> rhs.compression >> rhs.imagesize;
+    is >> rhs.xresolution >> rhs.yresolution;
+    is >> rhs.ncolours >> rhs.importantcolours;
+    return is;
+}
