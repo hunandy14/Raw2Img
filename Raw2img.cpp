@@ -72,4 +72,33 @@ void Raw::raw2graybmp(
     img.close();
 }
 //----------------------------------------------------------------
-
+void Raw::read_bmp(vector<uch>& raw, string name){
+    fstream file(name.c_str(), ios::in | ios::binary);
+    file.seekg(0, ios::beg);
+    // 讀檔頭
+    FileHeader file_h;
+    file >> file_h;
+    InfoHeader info_h;
+    file >> info_h;
+    // 讀 Raw
+    file.seekg(file_h.headSize, ios::beg);
+    raw.resize(info_h.imagesize);
+    size_t alig = (4 - info_h.width%4)%4;
+    char* p = reinterpret_cast<char*>(raw.data());
+    for(int j = info_h.height-1; j >= 0; --j) {
+        for(unsigned i = 0; i < info_h.width; ++i) {
+            // 來源是 rgb
+            if(info_h.bits == 24) {
+                file.read(p + j*info_h.width*3+i*3 + G, 1);
+                file.read(p + j*info_h.width*3+i*3 + B, 1);
+                file.read(p + j*info_h.width*3+i*3 + R, 1);
+            }
+            // 來源是 gray
+            else if (info_h.bits == 8) {
+                file.read(p + j*info_h.width+i, 1);
+            }
+        }
+        file.seekg(alig, ios::cur); // 跳開 4bite 對齊的空格
+    }
+    file.close();
+}
