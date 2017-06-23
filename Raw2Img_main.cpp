@@ -17,21 +17,18 @@ int main(int argc, char const *argv[]) {
     Raw::read_raw(raw_pix, rawName);
     string bmpName = "Seymour_Park.bmp";
 
-    // 彩圖存彩圖
-    // Raw::raw2bmp(bmpName, raw_pix, 960, 540);
-    // system(bmpName.c_str());
-    // 彩圖存灰階
-    // Raw::raw2graybmp(bmpName, raw_pix, 960, 540);
-    // system(bmpName.c_str());
-    // 灰階存灰階
+    // 存彩圖
+    Raw::raw2bmp(bmpName, raw_pix, 960, 540);
+    system(bmpName.c_str());
+    // 存灰階
     Raw::raw2gray(raw_pix);
-    Raw::raw2graybmp(bmpName, raw_pix, 960, 540, 8);
-    // system(bmpName.c_str());
+    Raw::raw2bmp(bmpName, raw_pix, 960, 540, 8);
+    system(bmpName.c_str());
 
     // 讀取 Bmp
-    vector<unsigned char> raw_pix2;
-    Raw::read_bmp(raw_pix2, bmpName);
-    Raw::write_raw("test_960x540_24bit.raw", raw_pix2);
+    // vector<unsigned char> raw_pix2;
+    // Raw::read_bmp(raw_pix2, bmpName);
+    // Raw::write_raw("test_960x540_24bit.raw", raw_pix2);
     return 0;
 }
 //================================================================

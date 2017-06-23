@@ -30,12 +30,14 @@ private:
     }
     // 創建檔頭
     static FileHeader makeFH(
-        size_t width, size_t height, size_t bits, size_t headSize=54)
+        size_t width, size_t height, size_t bits)
     {
         FileHeader file_h;
         file_h.size = file_h.headSize + width*height * bits/8;
-        if(bits==8) file_h.size += 1024;
-        file_h.headSize = headSize;
+        if(bits==8) {
+            file_h.size += 1024;
+            file_h.headSize += 1024;
+        }
         return file_h;
     }
     static InfoHeader makeIH(
