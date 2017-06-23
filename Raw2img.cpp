@@ -15,9 +15,9 @@ using uch = unsigned char;
 //----------------------------------------------------------------
 // 寫檔
 void Raw::raw2bmp(
-    string name, vector<uch>& raw, size_t width, size_t height)
+    string name, vector<uch>& raw, size_t width, size_t height, size_t bits)
 {
-    size_t bits = 24;
+    // size_t bits = 24;
     // 檔案資訊
     FileHeader file_h = makeFH(width, height, bits);
     // 圖片資訊
@@ -72,6 +72,7 @@ void Raw::raw2graybmp(
     img.close();
 }
 //----------------------------------------------------------------
+// 讀 Bmp 檔案
 void Raw::read_bmp(vector<uch>& raw, string name){
     fstream file(name.c_str(), ios::in | ios::binary);
     file.seekg(0, ios::beg);
