@@ -30,7 +30,7 @@ private:
     }
     // 創建檔頭
     static FileHeader makeFH(
-        size_t width, size_t height, size_t bits)
+        uint32_t width, uint32_t height, uint16_t bits)
     {
         FileHeader file_h;
         file_h.size = file_h.headSize + width*height * bits/8;
@@ -41,7 +41,7 @@ private:
         return file_h;
     }
     static InfoHeader makeIH(
-        size_t width, size_t height, size_t bits)
+        uint32_t width, uint32_t height, uint16_t bits)
     {
         InfoHeader info_h;
         info_h.width = width;
@@ -51,22 +51,6 @@ private:
         return info_h;
     }
 public:
-    // 讀 Bmp 檔案
-    static void read_bmp(std::vector<uch>& raw, std::string name);
-public:
-    // 讀檔
-    static void read_raw(std::vector<uch>& raw, std::string name) {
-        std::fstream file(name.c_str(), 
-            std::ios::in | std::ios::binary | std::ios::ate);
-        raw.resize(file.tellg());
-        file.seekg(0, std::ios::beg);
-        file.read(reinterpret_cast<char*>(raw.data()), raw.size());
-        file.close();
-    }
-    static void write_raw(std::string name, std::vector<uch>& raw) {
-        std::fstream img(name.c_str(), std::ios::out | std::ios::binary);
-        img.write(reinterpret_cast<char*>(raw.data()), raw.size());
-    }
     // 轉灰階
     static void raw2gray(std::vector<uch>& raw){
         raw2gray(raw, raw);
@@ -81,10 +65,23 @@ public:
         gray.resize(raw.size()/3);
     }
 public:
+    // 讀 Bmp 檔案
+    static void read_bmp(std::vector<uch>& raw, std::string name);
+    // 讀檔
+    static void read_raw(std::vector<uch>& raw, std::string name) {
+        std::fstream file(name.c_str(), 
+            std::ios::in | std::ios::binary | std::ios::ate);
+        raw.resize(static_cast<size_t>(file.tellg()));
+        file.seekg(0, std::ios::beg);
+        file.read(reinterpret_cast<char*>(raw.data()), raw.size());
+        file.close();
+    }
     // 寫檔
-    static void raw2bmp(
-        std::string name, std::vector<uch>& raw, size_t width, size_t height, size_t bits=24);
-    static void raw2graybmp(
-        std::string name, std::vector<uch>& raw, size_t width, size_t height,
-        size_t raw_bit=24, size_t img_bits=8);
+    static void raw2bmp(std::string name, std::vector<uch>& raw, 
+        uint32_t width, uint32_t height, uint16_t bits=24);
+    // 寫檔
+    static void write_raw(std::string name, std::vector<uch>& raw) {
+        std::fstream img(name.c_str(), std::ios::out | std::ios::binary);
+        img.write(reinterpret_cast<char*>(raw.data()), raw.size());
+    }
 };

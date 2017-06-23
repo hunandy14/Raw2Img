@@ -23,13 +23,13 @@ int main(int argc, char const *argv[]) {
     // 存灰階
     Raw::raw2gray(raw_pix);
     Raw::raw2bmp(bmpName, raw_pix, 960, 540, 8);
-    system(bmpName.c_str());
+    // system(bmpName.c_str());
 
     // 讀取 Bmp
     vector<unsigned char> raw_pix2;
     Raw::read_bmp(raw_pix2, bmpName);
     Raw::write_raw("test_960x540_24bit.raw", raw_pix2);
-    system("test_960x540_24bit.raw");
+    // system("test_960x540_24bit.raw");
     return 0;
 }
 //================================================================

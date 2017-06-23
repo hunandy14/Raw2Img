@@ -15,7 +15,7 @@ using uch = unsigned char;
 //----------------------------------------------------------------
 // 寫檔
 void Raw::raw2bmp(
-    string name, vector<uch>& raw, size_t width, size_t height, size_t bits)
+    string name, vector<uch>& raw, uint32_t width, uint32_t height, uint16_t bits)
 {
     // 檔案資訊
     FileHeader file_h = makeFH(width, height, bits);
@@ -40,39 +40,6 @@ void Raw::raw2bmp(
                 img << raw[(j*width+i)*3 + R];
             } else if (bits==8) {
                 img << raw[(j*width+i)];
-            }
-        }
-        // 對齊4byte
-        for(unsigned i = 0; i < alig; ++i)
-            img << uch(0);
-    }
-    img.close();
-}
-void Raw::raw2graybmp(
-    string name, vector<uch>& raw, size_t width, size_t height,
-    size_t raw_bit, size_t img_bits)
-{
-    size_t bits = img_bits;
-    // 檔頭
-    FileHeader file_h = makeFH(width, height, bits);
-    InfoHeader info_h = makeIH(width, height, bits);
-    // 寫檔頭
-    fstream img(name, ios::out | ios::binary);
-    img << file_h << info_h;
-    // 寫調色盤
-    for(unsigned i = 0; i < 256; ++i) {
-        img << uch(i) << uch(i) << uch(i) << uch(0);
-    }
-    // RAW檔
-    size_t alig = (4 - width%4)%4;
-    for(int j = height-1; j >= 0; --j) {
-        for(unsigned i = 0; i < width; ++i) {
-            for(unsigned k = 0; k < bits/8; ++k) {
-                if(raw_bit == 24) { // 來源是 rgb
-                    img << rgb2gray(&raw[j*width*3+i*3]);
-                } else if (raw_bit == 8) { // 來源是 gray
-                    img << raw[j*width+i];
-                }
             }
         }
         // 對齊4byte
