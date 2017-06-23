@@ -54,7 +54,7 @@ public:
         friend std::fstream& operator>>(
             std::fstream& is, byte2_t& rhs);
     };
-private:
+public:
     // 檔案檔頭型別(共 14 bytes)
     struct FileHeader {
         unsigned char type[2]= {'B', 'M'};
@@ -62,14 +62,23 @@ private:
         byte2_t reserved1=0;
         byte2_t reserved2=0;
         byte4_t headSize=54;
-        friend std::fstream & operator<<(
-            std::fstream & os, FileHeader const & rhs)
+        friend std::ostream & operator<<(
+            std::ostream & os, FileHeader const & rhs)
         {
             os << rhs.type[0] << rhs.type[1];
             os << rhs.size;
             os << rhs.reserved1 << rhs.reserved2;
             os << rhs.headSize;
             return os;
+        }
+        friend std::fstream& operator>>(
+            std::fstream& is, FileHeader & rhs)
+        {
+            is >> rhs.type[0] >> rhs.type[1];
+            is >> rhs.size;
+            is >> rhs.reserved1 >> rhs.reserved2;
+            is >> rhs.headSize;
+            return is;
         }
     };
     // 資訊檔頭型別 (共 40 byte)
@@ -87,8 +96,8 @@ private:
         byte4_t ncolours=0;
         byte4_t importantcolours=0;
 
-        friend std::fstream & operator<<(
-            std::fstream & os, InfoHeader const & rhs)
+        friend std::ostream& operator<<(
+            std::ostream& os, InfoHeader const & rhs)
         {
             os << rhs.size;
             os << rhs.width << rhs.height;
@@ -98,8 +107,19 @@ private:
             os << rhs.ncolours << rhs.importantcolours;
             return os;
         }
+        friend std::fstream& operator>>(
+            std::fstream& is, InfoHeader & rhs)
+        {
+            is >> rhs.size;
+            is >> rhs.width >> rhs.height;
+            is >> rhs.planes >> rhs.bits;
+            is >> rhs.compression >> rhs.imagesize;
+            is >> rhs.xresolution >> rhs.yresolution;
+            is >> rhs.ncolours >> rhs.importantcolours;
+            return is;
+        }
     };
-private:
+public:
     using uch = unsigned char;
     // RGB 轉灰階公式
     static uch rgb2gray(uch* p){
@@ -125,7 +145,7 @@ private:
         info_h.width = width;
         info_h.height = height;
         info_h.bits = bits;
-        info_h.imagesize = 0;
+        info_h.imagesize = width*height * bits/8;
         return info_h;
     }
 public:
@@ -183,18 +203,18 @@ inline std::ostream& operator<<(
 inline std::fstream& operator>>(
     std::fstream& is, Raw::byte4_t& rhs)
 {
-    using is_it = std::istream_iterator<unsigned char>;
-    rhs.bit.a = *static_cast<is_it>(is);
-    rhs.bit.b = *static_cast<is_it>(is);
-    rhs.bit.c = *static_cast<is_it>(is);
-    rhs.bit.d = *static_cast<is_it>(is);
+    istream_iterator<unsigned char> begin(is);
+    rhs.bit.a = *(begin);
+    rhs.bit.b = *(++begin);
+    rhs.bit.c = *(++begin);
+    rhs.bit.d = *(++begin);
     return is;
 }
 inline std::fstream& operator>>(
     std::fstream& is, Raw::byte2_t& rhs)
 {
-    using is_it = std::istream_iterator<unsigned char>;
-    rhs.bit.a = *static_cast<is_it>(is);
-    rhs.bit.b = *static_cast<is_it>(is);
+    istream_iterator<unsigned char> begin(is);
+    rhs.bit.a = *(begin);
+    rhs.bit.b = *(++begin);
     return is;
 }
