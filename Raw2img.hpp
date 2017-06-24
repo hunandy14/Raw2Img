@@ -22,7 +22,7 @@ class Raw {
 private:
     using uch = unsigned char;
     // RGB 轉灰階公式
-    static uch rgb2gray(uch* p){
+    static uch rgb2gray(uch* p) {
         return ((
             19595 * (*(p+R))+
             38469 * (*(p+G))+
@@ -48,14 +48,17 @@ private:
         info_h.height = height;
         info_h.bits = bits;
         info_h.imagesize = width*height * bits/8;
+        if(bits==8) {
+            info_h.ncolours=256;
+        }
         return info_h;
     }
 public:
     // 轉灰階
-    static void raw2gray(std::vector<uch>& raw){
+    static void raw2gray(std::vector<uch>& raw) {
         raw2gray(raw, raw);
     }
-    static void raw2gray(std::vector<uch>& gray, std::vector<uch>& raw){
+    static void raw2gray(std::vector<uch>& gray, std::vector<uch>& raw) {
         // 判定相等
         if(&gray!=&raw)
             gray.resize(raw.size()/3);
@@ -69,16 +72,16 @@ public:
     static void read_bmp(std::vector<uch>& raw, std::string name);
     // 讀檔
     static void read_raw(std::vector<uch>& raw, std::string name) {
-        std::fstream file(name.c_str(), 
-            std::ios::in | std::ios::binary | std::ios::ate);
+        std::fstream file(name.c_str(),
+                          std::ios::in | std::ios::binary | std::ios::ate);
         raw.resize(static_cast<size_t>(file.tellg()));
         file.seekg(0, std::ios::beg);
         file.read(reinterpret_cast<char*>(raw.data()), raw.size());
         file.close();
     }
     // 寫檔
-    static void raw2bmp(std::string name, std::vector<uch>& raw, 
-        uint32_t width, uint32_t height, uint16_t bits=24);
+    static void raw2bmp(std::string name, std::vector<uch>& raw,
+                        uint32_t width, uint32_t height, uint16_t bits=24);
     // 寫檔
     static void write_raw(std::string name, std::vector<uch>& raw) {
         std::fstream img(name.c_str(), std::ios::out | std::ios::binary);

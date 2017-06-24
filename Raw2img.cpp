@@ -1,5 +1,5 @@
 /*****************************************************************
-Name : 
+Name :
 Date : 2017/06/14
 By   : CharlotteHonG
 Final: 2017/06/14
@@ -15,7 +15,8 @@ using uch = unsigned char;
 //----------------------------------------------------------------
 // 寫檔
 void Raw::raw2bmp(
-    string name, vector<uch>& raw, uint32_t width, uint32_t height, uint16_t bits)
+    string name, vector<uch>& raw,
+    uint32_t width, uint32_t height, uint16_t bits)
 {
     // 檔案資訊
     FileHeader file_h = makeFH(width, height, bits);
@@ -25,8 +26,8 @@ void Raw::raw2bmp(
     fstream img(name, ios::out | ios::binary);
     img << file_h << info_h;
     // 寫調色盤
-    if(bits == 8) {   
-        for(unsigned i = 0; i < 256; ++i){
+    if(bits == 8) {
+        for(unsigned i = 0; i < 256; ++i) {
             img << uch(i) << uch(i) << uch(i) << uch(0);
         }
     }
@@ -38,7 +39,7 @@ void Raw::raw2bmp(
                 img << raw[(j*width+i)*3 + B];
                 img << raw[(j*width+i)*3 + G];
                 img << raw[(j*width+i)*3 + R];
-            } else if (bits==8) {
+            } else if(bits==8) {
                 img << raw[(j*width+i)];
             }
         }
@@ -50,7 +51,7 @@ void Raw::raw2bmp(
 }
 //----------------------------------------------------------------
 // 讀 Bmp 檔案
-void Raw::read_bmp(vector<uch>& raw, string name){
+void Raw::read_bmp(vector<uch>& raw, string name) {
     fstream file(name.c_str(), ios::in | ios::binary);
     file.seekg(0, ios::beg);
     // 讀檔頭
@@ -72,7 +73,7 @@ void Raw::read_bmp(vector<uch>& raw, string name){
                 file.read(p + j*info_h.width*3+i*3 + R, 1);
             }
             // 來源是 gray
-            else if (info_h.bits == 8) {
+            else if(info_h.bits == 8) {
                 file.read(p + j*info_h.width+i, 1);
             }
         }

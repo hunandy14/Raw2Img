@@ -19,11 +19,11 @@ int main(int argc, char const *argv[]) {
 
     // 存彩圖
     Raw::raw2bmp(bmpName, raw_pix, 960, 540);
-    system(bmpName.c_str());
+    // system(bmpName.c_str());
     // 存灰階
     Raw::raw2gray(raw_pix);
     Raw::raw2bmp(bmpName, raw_pix, 960, 540, 8);
-    // system(bmpName.c_str());
+    system(bmpName.c_str());
 
     // 讀取 Bmp
     vector<unsigned char> raw_pix2;
