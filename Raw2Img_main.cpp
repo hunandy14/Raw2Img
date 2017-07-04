@@ -5,9 +5,7 @@ By   : CharlotteHonG
 Final: 2017/06/14
 *****************************************************************/
 #include <iostream>
-#include <fstream>
 #include <vector>
-#include <string>
 #include "Raw2Img.hpp"
 using namespace std;
 //================================================================
