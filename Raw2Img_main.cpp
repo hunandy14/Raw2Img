@@ -24,17 +24,18 @@ int main(int argc, char const *argv[]) {
     system(bmpName.c_str());
 
     // 讀取 Bmp
-    // vector<unsigned char> raw_pix2;
-    // Raw::read_bmp(raw_pix2, "conna.bmp");
-    // Raw::write_raw("conna.raw", raw_pix2);
+    vector<unsigned char> raw_pix2;
+    Raw::read_bmp(raw_pix2, "conna.bmp");
+    Raw::write_raw("conna.raw", raw_pix2);
+    // system("conna.raw");
 
-    // Raw::read_raw(raw_pix, "conna.raw");
-    // Raw::raw2bmp("conna2.bmp", raw_pix, 850, 620);
+    Raw::read_raw(raw_pix, "conna.raw");
+    Raw::raw2bmp("conna2.bmp", raw_pix, 850, 602);
+    // system("conna.bmp");
 
-    // Raw::raw2bmp("conna2.bmp", raw_pix2, 960, 540);
-    // Raw::write_raw("test_960x540_24bit.raw", raw_pix2);
-    
-    // system("test_960x540_24bit.raw");
+    Raw::raw2bmp("conna2.bmp", raw_pix2, 850, 602);
+    Raw::write_raw("conna2.raw", raw_pix2);
+    // system("conna2.raw");
     return 0;
 }
 //================================================================
