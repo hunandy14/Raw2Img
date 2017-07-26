@@ -64,6 +64,9 @@ void Raw::read_bmp(vector<uch>& raw, string name) {
     raw.resize(info_h.imagesize);
     size_t alig = (4 - info_h.width%4)%4;
     char* p = reinterpret_cast<char*>(raw.data());
+
+    // cout << "W=" << (int)info_h.width << endl;
+    
     for(int j = info_h.height-1; j >= 0; --j) {
         for(unsigned i = 0; i < info_h.width; ++i) {
             // 來源是 rgb
@@ -79,5 +82,6 @@ void Raw::read_bmp(vector<uch>& raw, string name) {
         }
         file.seekg(alig, ios::cur); // 跳開 4bite 對齊的空格
     }
+    
     file.close();
 }
