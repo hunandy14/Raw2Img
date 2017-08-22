@@ -36,3 +36,10 @@ IMG_OUT.raw
 # Othwe files
 *.m
 *.bmp
+*.vcxproj
+*.filters
+*.tlog
+*.lastbuildstate
+*.idb
+*.pdb
+*.log

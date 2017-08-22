@@ -20,10 +20,8 @@ void Raw::raw2bmp(
 {
     // 檔案資訊
     BmpFileHeader file_h = makeFH(width, height, bits);
-    // cout << file_h << endl;
     // 圖片資訊
     BmpInfoHeader info_h = makeIH(width, height, bits);
-    // cout << info_h << endl;
     // 寫檔
     ofstream bmp(name, ios::binary);
     bmp.exceptions(ifstream::failbit|ifstream::badbit);
@@ -47,8 +45,9 @@ void Raw::raw2bmp(
             }
         }
         // 對齊4byte
-        for(unsigned i = 0; i < alig; ++i)
-            bmp << uch(0);
+		for(unsigned i = 0; i < alig * (bits / 8); ++i) {
+			bmp << uch(0);
+		}
     }
 }
 // 寫 Raw 檔
@@ -71,8 +70,8 @@ void Raw::read_bmp(vector<uch>& raw, string name,
     bmp >> info_h;
     // 讀 Raw
     bmp.seekg(file_h.bfOffBits, ios::beg);
-    raw.resize(info_h.biSizeImage);
-    size_t alig = (4 - info_h.biWidth%4)%4;
+    raw.resize(info_h.biWidth * info_h.biHeight * (info_h.biBitCount/8));
+    size_t alig = (4 - info_h.biWidth%4) % 4;
     char* p = reinterpret_cast<char*>(raw.data());
     for(int j = info_h.biHeight-1; j >= 0; --j) {
         for(unsigned i = 0; i < info_h.biWidth; ++i) {
@@ -87,7 +86,7 @@ void Raw::read_bmp(vector<uch>& raw, string name,
                 bmp.read(p + j*info_h.biWidth+i, 1);
             }
         }
-        bmp.seekg(alig, ios::cur); // 跳開 4bite 對齊的空格
+        bmp.seekg(alig * (info_h.biBitCount/8), ios::cur); // 跳開 4bite 對齊的空格
     }
 }
 // 讀 Raw 檔
