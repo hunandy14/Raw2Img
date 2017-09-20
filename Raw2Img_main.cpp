@@ -10,34 +10,16 @@ Final: 2017/06/14
 using namespace std;
 //================================================================
 int main(int argc, char const *argv[]) {
-    vector<unsigned char> raw_pix;
-    string rawName = "Seymour_Park_960x540_24bit.raw";
-    Raw::read_raw(raw_pix, rawName);
-    string bmpName = "out.bmp";
-
-    // 存彩圖
-    Raw::raw2bmp(bmpName, raw_pix, 960, 540);
-    //system(bmpName.c_str());
-    // 存灰階
-    Raw::raw2gray(raw_pix);
-    Raw::raw2bmp(bmpName, raw_pix, 960, 540, 8);
-    //system(bmpName.c_str());
-
-    // 讀取 Bmp
-    vector<unsigned char> raw_pix2;
-    Raw::read_bmp(raw_pix2, "en2.bmp");
-    Raw::write_raw("out.raw", raw_pix2);
-	Raw::raw2bmp("en2_t.bmp", raw_pix2, 479, 428);
-	//system("en2_t.bmp");
-    //system("out.raw");
-
-     Raw::read_raw(raw_pix, "conna.raw");
-     Raw::raw2bmp("conna2.bmp", raw_pix, 850, 602);
-    // system("conna.bmp");
-
-     Raw::raw2bmp("conna2.bmp", raw_pix2, 850, 602);
-     Raw::write_raw("conna2.raw", raw_pix2);
-    // system("conna2.raw");
+    vector<unsigned char> raw_img;
+    uint32_t weidth, heigh;
+    uint16_t bits;
+    /* 讀寫 Bmp */
+    Raw::read_bmp(raw_img, "ImgInput/Einstein.bmp", &weidth, &heigh, &bits);
+    Raw::write_raw("ImgOutput/out_Einstein.raw", raw_img);
+    Raw::raw2bmp("ImgOutput/out_Einstein.bmp", raw_img, weidth, heigh, bits);
+    /* 轉灰階 */
+    Raw::raw2gray(raw_img);
+    Raw::raw2bmp("ImgOutput/out_Einstein_gray.bmp", raw_img, weidth, heigh, 8);
     return 0;
 }
 //================================================================

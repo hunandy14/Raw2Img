@@ -45,9 +45,9 @@ void Raw::raw2bmp(
             }
         }
         // 對齊4byte
-		for(unsigned i = 0; i < alig * (bits / 8); ++i) {
-			bmp << uch(0);
-		}
+        for(unsigned i = 0; i < alig * (bits / 8); ++i) {
+            bmp << uch(0);
+        }
     }
 }
 // 寫 Raw 檔
@@ -69,9 +69,14 @@ void Raw::read_bmp(vector<uch>& raw, string name,
     BmpInfoHeader info_h;
     bmp >> info_h;
     // 回傳資訊
-    *width = info_h.biWidth;
-    *height = info_h.biHeight;
-    *bits = info_h.biBitCount;
+    if (width  != nullptr && 
+        height != nullptr && 
+        bits   != nullptr)
+    {
+        *width  = info_h.biWidth;
+        *height = info_h.biHeight;
+        *bits   = info_h.biBitCount;
+    }
     // 讀 Raw
     bmp.seekg(file_h.bfOffBits, ios::beg);
     raw.resize(info_h.biWidth * info_h.biHeight * (info_h.biBitCount/8));
@@ -90,7 +95,7 @@ void Raw::read_bmp(vector<uch>& raw, string name,
                 bmp.read(p + j*info_h.biWidth+i, 1);
             }
         }
-        bmp.seekg(alig, ios::cur); // 跳開 4bite 對齊的空格
+        bmp.seekg(alig * (info_h.biBitCount/8), ios::cur); // 跳開 4bite 對齊的空格
     }
 }
 // 讀 Raw 檔
