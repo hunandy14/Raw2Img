@@ -14,12 +14,12 @@ int main(int argc, char const *argv[]) {
     uint32_t weidth, heigh;
     uint16_t bits;
     /* 讀寫 Bmp */
-    Raw::read_bmp(raw_img, "ImgInput/Einstein.bmp", &weidth, &heigh, &bits);
+    Raw::read_bmp(raw_img, "ImgInput/kanna3.bmp", &weidth, &heigh, &bits);
     Raw::write_raw("ImgOutput/out_Einstein.raw", raw_img);
     Raw::raw2bmp("ImgOutput/out_Einstein.bmp", raw_img, weidth, heigh, bits);
     /* 轉灰階 */
-    Raw::raw2gray(raw_img);
-    Raw::raw2bmp("ImgOutput/out_Einstein_gray.bmp", raw_img, weidth, heigh, 8);
+    /*Raw::raw2gray(raw_img);
+    Raw::raw2bmp("ImgOutput/out_Einstein_gray.bmp", raw_img, weidth, heigh, 8);*/
     return 0;
 }
 //================================================================

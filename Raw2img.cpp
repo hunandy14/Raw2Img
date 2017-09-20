@@ -33,7 +33,7 @@ void Raw::raw2bmp(
         }
     }
     // 寫入圖片資訊
-    size_t alig = (4 - width%4)%4;
+    size_t alig = (width*3) % 4;
     for(int j = height-1; j >= 0; --j) {
         for(unsigned i = 0; i < width; ++i) {
             if(bits==24) {
@@ -45,7 +45,7 @@ void Raw::raw2bmp(
             }
         }
         // 對齊4byte
-        for(unsigned i = 0; i < alig * (bits / 8); ++i) {
+        for(unsigned i = 0; i < alig; ++i) {
             bmp << uch(0);
         }
     }
@@ -80,7 +80,7 @@ void Raw::read_bmp(vector<uch>& raw, string name,
     // 讀 Raw
     bmp.seekg(file_h.bfOffBits, ios::beg);
     raw.resize(info_h.biWidth * info_h.biHeight * (info_h.biBitCount/8));
-    size_t alig = (4 - info_h.biWidth%4) % 4;
+    size_t alig = (info_h.biWidth*3) % 4;
     char* p = reinterpret_cast<char*>(raw.data());
     for(int j = info_h.biHeight-1; j >= 0; --j) {
         for(unsigned i = 0; i < info_h.biWidth; ++i) {
@@ -95,7 +95,7 @@ void Raw::read_bmp(vector<uch>& raw, string name,
                 bmp.read(p + j*info_h.biWidth+i, 1);
             }
         }
-        bmp.seekg(alig * (info_h.biBitCount/8), ios::cur); // 跳開 4bite 對齊的空格
+        bmp.seekg(alig, ios::cur); // 跳開 4bite 對齊的空格
     }
 }
 // 讀 Raw 檔
