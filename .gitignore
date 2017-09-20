@@ -43,3 +43,4 @@ IMG_OUT.raw
 *.idb
 *.pdb
 *.log
+*.obj.enc
