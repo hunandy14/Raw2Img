@@ -14,7 +14,7 @@ using namespace std;
 using uch = unsigned char;
 //----------------------------------------------------------------
 // 寫 Bmp 檔
-void Raw::raw2bmp(
+void Raw2Img::raw2bmp(
     string name, vector<uch>& raw,
     uint32_t width, uint32_t height, uint16_t bits)
 {
@@ -33,7 +33,8 @@ void Raw::raw2bmp(
         }
     }
     // 寫入圖片資訊
-    size_t alig = (width*3) % 4;
+	size_t realW = info_h.biWidth * info_h.biBitCount/8.0;
+	size_t alig = (realW*3) % 4;
     for(int j = height-1; j >= 0; --j) {
         for(unsigned i = 0; i < width; ++i) {
             if(bits==24) {
@@ -51,14 +52,14 @@ void Raw::raw2bmp(
     }
 }
 // 寫 Raw 檔
-void Raw::write_raw(std::string name, std::vector<uch>& raw) {
+void Raw2Img::write_raw(std::string name, std::vector<uch>& raw) {
     std::ofstream raw_file(name.c_str(), std::ios::binary);
     raw_file.exceptions(std::ifstream::failbit|std::ifstream::badbit);
     raw_file.write(reinterpret_cast<char*>(raw.data()), raw.size());
 }
 //----------------------------------------------------------------
 // 讀 Bmp 檔案
-void Raw::read_bmp(vector<uch>& raw, string name,
+void Raw2Img::read_bmp(vector<uch>& raw, string name,
     uint32_t* width, uint32_t* height, uint16_t* bits) {
     ifstream bmp(name.c_str(), ios::binary);
     bmp.exceptions(ifstream::failbit|ifstream::badbit);
@@ -80,7 +81,8 @@ void Raw::read_bmp(vector<uch>& raw, string name,
     // 讀 Raw
     bmp.seekg(file_h.bfOffBits, ios::beg);
     raw.resize(info_h.biWidth * info_h.biHeight * (info_h.biBitCount/8));
-    size_t alig = (info_h.biWidth*3) % 4;
+	size_t realW = info_h.biWidth * info_h.biBitCount/8.0;
+    size_t alig = (realW*3) % 4;
     char* p = reinterpret_cast<char*>(raw.data());
     for(int j = info_h.biHeight-1; j >= 0; --j) {
         for(unsigned i = 0; i < info_h.biWidth; ++i) {
@@ -99,7 +101,7 @@ void Raw::read_bmp(vector<uch>& raw, string name,
     }
 }
 // 讀 Raw 檔
-void Raw::read_raw(std::vector<uch>& raw, std::string name) {
+void Raw2Img::read_raw(std::vector<uch>& raw, std::string name) {
     std::ifstream raw_file(name.c_str(), 
         std::ios::binary | std::ios::ate);
     raw_file.exceptions(std::ifstream::failbit|std::ifstream::badbit);

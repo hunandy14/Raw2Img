@@ -5,6 +5,15 @@ By   : CharlotteHonG
 Final: 2017/06/23
 *****************************************************************/
 #pragma once
+
+struct basic_ImgData {
+	std::vector<unsigned char> raw_img;
+	uint32_t width;
+	uint32_t height;
+	uint16_t bits;
+};
+
+
 /*
     ########   ######   ########
     ##     ## ##    ##  ##     ##
@@ -15,15 +24,15 @@ Final: 2017/06/23
     ##     ##  ######   ########
 */
 
-enum RGB {R, G, B};
-class RGB_t {
+enum RGBs {R, G, B};
+class RGBs_t {
 public:
-    RGB_t(size_t rgb): rgb(RGB(rgb)) {
+    RGBs_t(size_t rgb): rgb(RGBs(rgb)) {
         if(rgb>2) {throw std::range_error("range only 0~2");}
     }
-    inline operator RGB() {return rgb;}
+    inline operator RGBs() {return rgb;}
 private:
-    RGB rgb;
+    RGBs rgb;
 };
 /*
     ######## #### ##       ########         ##     ##
